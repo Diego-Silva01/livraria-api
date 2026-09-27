@@ -1,5 +1,4 @@
 package com.example.demo.exception;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,8 +15,7 @@ public ResponseEntity<String>resposta(AutorNaoEncontradoException mensagem){
     public ResponseEntity<String> resposta(AutorJaCadastradoException mensagem){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagem.getMessage());
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> resposta(MethodArgumentNotValidException mensagem){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagem.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
-    }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagem.getBindingResult().getFieldErrors().get(0).getDefaultMessage());}
 }

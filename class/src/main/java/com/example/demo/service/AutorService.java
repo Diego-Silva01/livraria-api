@@ -72,6 +72,9 @@ Autor autorExist = autorRepository.findById(id).orElseThrow(()-> new AutorNaoEnc
        autorRepository.deleteById(id);
 
 }
+public void deletaTodos(){
+        autorRepository.deleteAll();
+}
 
     }
 
