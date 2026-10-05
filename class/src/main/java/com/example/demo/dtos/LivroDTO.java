@@ -7,6 +7,16 @@
             return id;
         }
 
+        public String getAutorNome() {
+            return autorNome;
+        }
+
+        public void setAutorNome(String autorNome) {
+            this.autorNome = autorNome;
+        }
+
+        private String autorNome;
+
         public void setId(Long id) {
             this.id = id;
         }

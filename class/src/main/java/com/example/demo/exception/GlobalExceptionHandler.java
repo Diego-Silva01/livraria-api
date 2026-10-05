@@ -18,4 +18,11 @@ public ResponseEntity<String>resposta(AutorNaoEncontradoException mensagem){
      @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> resposta(MethodArgumentNotValidException mensagem){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagem.getBindingResult().getFieldErrors().get(0).getDefaultMessage());}
+
+    @ExceptionHandler(LivroNaoEncontrado.class)
+    public ResponseEntity<String> resposta(LivroNaoEncontrado mensagem){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(mensagem.getMessage());
+    }
 }

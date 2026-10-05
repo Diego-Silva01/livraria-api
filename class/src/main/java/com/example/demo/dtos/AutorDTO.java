@@ -7,7 +7,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 public class AutorDTO {
-  @NotBlank (message = "O nome e obrigatorio!")
+    public String getAutorNome() {
+        return autorNome;
+    }
+
+    public void setAutorNome(String autorNome) {
+        this.autorNome = autorNome;
+    }
+
+    private String autorNome;
+
+    @NotBlank (message = "O nome e obrigatorio!")
     private String nome;
 
     private Long id;
