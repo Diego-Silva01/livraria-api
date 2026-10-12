@@ -1,5 +1,6 @@
 package com.example.demo.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +19,7 @@ public class AutorDTO {
     private String autorNome;
 
     @NotBlank (message = "O nome e obrigatorio!")
+    @Schema(description = "Nome completo do autor", example = "Machado de Assis")
     private String nome;
 
     private Long id;

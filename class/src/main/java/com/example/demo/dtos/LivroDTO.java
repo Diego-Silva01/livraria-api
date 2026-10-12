@@ -1,5 +1,7 @@
     package com.example.demo.dtos;
 
+    import io.swagger.v3.oas.annotations.media.Schema;
+
     import java.util.Date;
 
     public class LivroDTO {
@@ -45,7 +47,7 @@
         public void setNome(String nome) {
             this.nome = nome;
         }
-
+        @Schema(description = "Nome completo do livro", example ="Analise de dados")
         private String nome;
         private Date data;
         private Long autorId;

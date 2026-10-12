@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dtos.AutorDTO;
 import com.example.demo.dtos.LivroDTO;
 import com.example.demo.entidys.Autor;
 import com.example.demo.entidys.Livro;
@@ -23,6 +22,17 @@ public class LivroService {
         this.autorRepository = autorRepository;
     }
 
+    public LivroDTO converteParaDTO(Livro livro){
+        LivroDTO livroDTO = new LivroDTO();
+        livroDTO.setNome(livro.getNome());
+        livroDTO.setId(livro.getId());
+        livroDTO.setAutorId(livro.getAutor().getId());
+        livroDTO.setData(livro.getData());
+        livroDTO.setAutorNome(livro.getAutor().getNome());
+        return livroDTO;
+
+    }
+
     public LivroDTO salvar(LivroDTO livroDTO) {
         Autor autor = autorRepository.findById(livroDTO.getAutorId())
                 .orElseThrow(() -> new AutorNaoEncontradoException("Autor não encontrado"));
@@ -31,13 +41,7 @@ public class LivroService {
 
         Livro livro1 = livroRepository.save(livro);
 
-        LivroDTO livroDTORetorno = new LivroDTO();
-        livroDTORetorno.setNome(livro1.getNome());
-        livroDTORetorno.setData(livro1.getData());
-        livroDTORetorno.setId(livro1.getId());
-        livroDTORetorno.setAutorId(livro1.getAutor().getId());
-
-        return livroDTORetorno;
+       return converteParaDTO(livro1);
     }
 
     public List<LivroDTO> buscarTodos() {
@@ -45,14 +49,7 @@ public class LivroService {
         List<LivroDTO> listaDelivroDTOSRetornada = new ArrayList<>();
         for (Livro livro : livrosEncontrados) {
 
-            LivroDTO livroDTO = new LivroDTO();
-            livroDTO.setId(livro.getId());
-            livroDTO.setNome(livro.getNome());
-            livroDTO.setData(livro.getData());
-            livroDTO.setAutorId(livro.getAutor().getId());
-            livroDTO.setAutorNome(livro.getAutor().getNome());
-            listaDelivroDTOSRetornada.add(livroDTO);
-
+            listaDelivroDTOSRetornada.add(converteParaDTO(livro));
 
         }
         return listaDelivroDTOSRetornada;
@@ -60,12 +57,8 @@ public class LivroService {
 
     public LivroDTO buscarLivroPorID(Long id) {
         Livro livro = livroRepository.findById(id).orElseThrow(() -> new LivroNaoEncontrado("Livro não encontrdo"));
-        LivroDTO livroDTO1 = new LivroDTO();
-        livroDTO1.setId(livro.getId());
-        livroDTO1.setData(livro.getData());
-        livroDTO1.setNome(livro.getNome());
-        livroDTO1.setAutorId(livro.getAutor().getId());
-return livroDTO1;
+
+return converteParaDTO(livro);
     }
     public LivroDTO atualizarLivro(LivroDTO livroDTO, Long id) {
         // 1. Busca o livro existente pelo ID da URL
@@ -85,13 +78,7 @@ return livroDTO1;
         Livro livro1Atualizado = livroRepository.save(livro);
 
         // 5. Converte a Entity atualizada de volta para DTO para retornar ao cliente
-        LivroDTO objetoQueGuardaraOsdadosnovos = new LivroDTO();
-        objetoQueGuardaraOsdadosnovos.setId(livro1Atualizado.getId());
-        objetoQueGuardaraOsdadosnovos.setNome(livro1Atualizado.getNome());
-        objetoQueGuardaraOsdadosnovos.setData(livro1Atualizado.getData());
-        objetoQueGuardaraOsdadosnovos.setAutorId(livro1Atualizado.getAutor().getId()); // Retorna o ID do autor corretamente
-
-        return objetoQueGuardaraOsdadosnovos;
+       return converteParaDTO(livro1Atualizado);
     }
     public void deletar(Long id){
    livroRepository.findById(id).orElseThrow(()-> new LivroNaoEncontrado("Livro não encontrado"));
