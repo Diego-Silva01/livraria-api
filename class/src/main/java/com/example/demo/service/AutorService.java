@@ -18,6 +18,12 @@ public class AutorService {
         this.autorRepository = autorRepository;
     }
 
+    public AutorDTO converteParaDTO(Autor autor){
+        AutorDTO autorDTO = new AutorDTO();
+        autorDTO.setNome(autor.getNome());
+        autorDTO.setId(autor.getId());
+        return autorDTO;
+    }
     public AutorDTO salvar(AutorDTO autorDTO) {
         Autor autor = new Autor();
         autor.setNome(autorDTO.getNome());
@@ -27,31 +33,26 @@ public class AutorService {
 
         }
         Autor salvo = autorRepository.save(autor);
-        AutorDTO resposta = new AutorDTO();
-        resposta.setNome(salvo.getNome());
-        resposta.setId(salvo.getId());
-        return resposta;
+
+        return converteParaDTO(salvo);
     }
 
     public List<AutorDTO> buscar() {
-      List<Autor> autoresCadastrado = autorRepository.findAll();
-      List<AutorDTO> autorDTOS = new ArrayList<>();
-      for (Autor autor:autoresCadastrado){
-          AutorDTO dto = new AutorDTO();
-          dto.setNome(autor.getNome());
-          dto.setId(autor.getId());
-          autorDTOS.add(dto);
-      }
+        List<Autor> autoresCadastrados = autorRepository.findAll();
+        List<AutorDTO> autorDTOS = new ArrayList<>();
+
+        for (Autor autor : autoresCadastrados) {
+            autorDTOS.add(converteParaDTO(autor));
+        }
+
         return autorDTOS;
     }
 
     public AutorDTO buscarPorId(Long id) {
         Autor autor = autorRepository.findById(id)
                 .orElseThrow(()  -> new AutorNaoEncontradoException("Autor não encontrado!"));
-        AutorDTO autorDTO = new AutorDTO();
-        autorDTO.setNome(autor.getNome());
-        autorDTO.setId(autor.getId());
-        return autorDTO;
+
+        return  converteParaDTO(autor);
 
     }
 
@@ -62,10 +63,7 @@ public AutorDTO updateAutor(Long id, AutorDTO autorDTO) {
     }
         autorexiteste.setNome(autorDTO.getNome());
     Autor autor = autorRepository.save(autorexiteste);
-    AutorDTO salvo = new AutorDTO();
-    salvo.setNome(autor.getNome());
-    salvo.setId(autor.getId());
-       return salvo;
+       return converteParaDTO(autor);
 }
 public void deleteAutor(Long id){
 Autor autorExist = autorRepository.findById(id).orElseThrow(()-> new AutorNaoEncontradoException("Autor não encontrado, impossivel deleta-lo!"));

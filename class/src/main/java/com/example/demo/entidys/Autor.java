@@ -29,7 +29,5 @@ public class Autor {
         this.nome = nome;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 }
