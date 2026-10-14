@@ -4,7 +4,14 @@ import com.example.demo.dtos.AutorDTO;
 import com.example.demo.entidys.Autor;
 import com.example.demo.exception.AutorJaCadastradoException;
 import com.example.demo.exception.AutorNaoEncontradoException;
+import com.example.demo.exception.AutorPossuiLivrosException;
 import com.example.demo.repository.AutorRepository;
+import com.example.demo.repository.LivroRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,9 +20,11 @@ import java.util.List;
 @Service
 public class AutorService {
     private final AutorRepository autorRepository;
+    private final LivroRepository livroRepository;
 
-    public AutorService(AutorRepository autorRepository) {
+    public AutorService(AutorRepository autorRepository, LivroRepository livroRepository) {
         this.autorRepository = autorRepository;
+        this.livroRepository = livroRepository;
     }
 
     public AutorDTO converteParaDTO(Autor autor){
@@ -66,14 +75,37 @@ public AutorDTO updateAutor(Long id, AutorDTO autorDTO) {
        return converteParaDTO(autor);
 }
 public void deleteAutor(Long id){
-Autor autorExist = autorRepository.findById(id).orElseThrow(()-> new AutorNaoEncontradoException("Autor não encontrado, impossivel deleta-lo!"));
+    autorRepository.findById(id)
+            .orElseThrow(() ->
+                    new AutorNaoEncontradoException(
+                            "Autor não encontrado, impossível deletá-lo!"
+                    )
+            );    if (livroRepository.existsByAutorId(id)) {
+        throw new AutorPossuiLivrosException(
+                "O autor possui livros cadastrados, impossível deletar!"
+        );
+    }
        autorRepository.deleteById(id);
 
 }
 public void deletaTodos(){
         autorRepository.deleteAll();
 }
+    public Page<AutorDTO> buscarPorFiltro(int pagina, int iten) {
+        // 1. Cria o objeto de paginação
+        Pageable pageable = PageRequest.of(pagina, iten);
 
+        // 2. Busca os dados paginados direto no repositório (retorna Page<Autor>)
+        Page<Autor> autoresPage = autorRepository.findAll(pageable);
+
+        // 3. Aplica o .map() para converter cada Autor em AutorDTO
+        Page<AutorDTO> autoresDtoPage = autoresPage.map(autor -> converteParaDTO(autor));
+
+        // 4. Retorna o Page já convertido
+        return autoresDtoPage;
     }
+}
+
+
 
 

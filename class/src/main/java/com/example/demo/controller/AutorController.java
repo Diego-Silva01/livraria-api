@@ -47,6 +47,7 @@ public class AutorController {
     @Operation(summary = "Deletar autor", description = "Remove um autor do banco de dados pelo ID")
     @DeleteMapping("/{id}")
     public void deleteAutor(@PathVariable Long id) {
+
         autorService.deleteAutor(id);
     }
 

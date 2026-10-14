@@ -25,4 +25,8 @@ public ResponseEntity<String>resposta(AutorNaoEncontradoException mensagem){
                 .status(HttpStatus.NOT_FOUND)
                 .body(mensagem.getMessage());
     }
+    @ExceptionHandler(AutorPossuiLivrosException.class)
+    public ResponseEntity<String> resposta(AutorPossuiLivrosException mensagem){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagem.getMessage());
+    }
 }
